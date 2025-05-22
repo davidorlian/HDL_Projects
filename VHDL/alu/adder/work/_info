@@ -1,0 +1,281 @@
+m255
+K4
+z2
+!s11e MIXED_VERSIONS
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/david/VHDLProjects/alu/adder
+Eadder_32_bit
+Z1 w1742503875
+Z2 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z3 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+Z4 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z5 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 11
+R0
+Z6 8C:/Users/david/VHDLProjects/alu/adder/adder_32_bit.vhd
+Z7 FC:/Users/david/VHDLProjects/alu/adder/adder_32_bit.vhd
+l0
+L5 1
+VkXNH^6YfMcD4=03bPB3nS0
+!s100 0ALD^6aALKTkOc2>Xj=lU1
+Z8 OV;C;2020.1;71
+32
+Z9 !s110 1742503889
+!i10b 1
+Z10 !s108 1742503889.000000
+Z11 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/adder_32_bit.vhd|
+!s107 C:/Users/david/VHDLProjects/alu/adder/adder_32_bit.vhd|
+!i113 1
+Z12 o-work work
+Z13 tExplicit 1 CvgOpt 0
+Aadder_32_bit_arc
+R2
+R3
+R4
+R5
+DEx4 work 12 adder_32_bit 0 22 kXNH^6YfMcD4=03bPB3nS0
+!i122 11
+l33
+L16 25
+VW]K3k405k69XkF3:_ZWGQ3
+!s100 H<fXa36b7`ReB==5L1lXF2
+R8
+32
+R9
+!i10b 1
+R10
+R11
+Z14 !s107 C:/Users/david/VHDLProjects/alu/adder/adder_32_bit.vhd|
+!i113 1
+R12
+R13
+Eadder_8_bit
+Z15 w1742503769
+R2
+R3
+R4
+R5
+!i122 5
+R0
+Z16 8C:/Users/david/VHDLProjects/alu/adder/adder_8_bit.vhd
+Z17 FC:/Users/david/VHDLProjects/alu/adder/adder_8_bit.vhd
+l0
+L5 1
+V8;NTF4A^ho[mE=S<QGV@P3
+!s100 dYoWdFBTS1EUSf:Zj2LG=0
+R8
+32
+Z18 !s110 1742503825
+!i10b 1
+Z19 !s108 1742503825.000000
+Z20 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/adder_8_bit.vhd|
+Z21 !s107 C:/Users/david/VHDLProjects/alu/adder/adder_8_bit.vhd|
+!i113 1
+R12
+R13
+Aadder_8_bit_arc
+R2
+R3
+R4
+R5
+DEx4 work 11 adder_8_bit 0 22 8;NTF4A^ho[mE=S<QGV@P3
+!i122 5
+l46
+L15 43
+VA^CaZ<C^_;OWng_4J^8>l0
+!s100 ?FhDKUOf^?<ENSbYU1F0d1
+R8
+32
+R18
+!i10b 1
+R19
+R20
+R21
+!i113 1
+R12
+R13
+Eadder_8_bit_cin
+Z22 w1742503772
+R2
+R3
+R4
+R5
+!i122 6
+R0
+Z23 8C:/Users/david/VHDLProjects/alu/adder/adder_8_bit_Cin.vhd
+Z24 FC:/Users/david/VHDLProjects/alu/adder/adder_8_bit_Cin.vhd
+l0
+L5 1
+VTCIVahWgMBz<N=7FAN_GZ0
+!s100 A:gf6;Mob]Qak^<f;gVPh0
+R8
+32
+R18
+!i10b 1
+R19
+Z25 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/adder_8_bit_Cin.vhd|
+Z26 !s107 C:/Users/david/VHDLProjects/alu/adder/adder_8_bit_Cin.vhd|
+!i113 1
+R12
+R13
+Aadder_8_bit_cin_arc
+R2
+R3
+R4
+R5
+DEx4 work 15 adder_8_bit_cin 0 22 TCIVahWgMBz<N=7FAN_GZ0
+!i122 6
+l37
+L16 33
+Vf];0cV1^Zd_<MIN?:>nlO3
+!s100 6H:1;5[lmhCQTYWzQ;AUO2
+R8
+32
+R18
+!i10b 1
+R19
+R25
+R26
+!i113 1
+R12
+R13
+Efull_adder
+Z27 w1742472396
+R2
+R3
+R4
+R5
+!i122 8
+R0
+Z28 8C:/Users/david/VHDLProjects/alu/adder/full_adder.vhd
+Z29 FC:/Users/david/VHDLProjects/alu/adder/full_adder.vhd
+l0
+L5 1
+VfFklF6;@?=>g_6^M639hh1
+!s100 <]3e[P`O;cXb5dIGXOomN2
+R8
+32
+Z30 !s110 1742503826
+!i10b 1
+Z31 !s108 1742503826.000000
+Z32 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/full_adder.vhd|
+Z33 !s107 C:/Users/david/VHDLProjects/alu/adder/full_adder.vhd|
+!i113 1
+R12
+R13
+Afull_adder_arc
+R2
+R3
+R4
+R5
+DEx4 work 10 full_adder 0 22 fFklF6;@?=>g_6^M639hh1
+!i122 8
+l17
+L16 7
+VFMiVAMAek4Hi1MC_oUM<<2
+!s100 o1<bg^ZcdJCP@0W]8@bG`1
+R8
+32
+R30
+!i10b 1
+R31
+R32
+R33
+!i113 1
+R12
+R13
+Ehalf_adder
+Z34 w1742471620
+R2
+R3
+R4
+R5
+!i122 9
+R0
+Z35 8C:/Users/david/VHDLProjects/alu/adder/half_adder.vhd
+Z36 FC:/Users/david/VHDLProjects/alu/adder/half_adder.vhd
+l0
+L5 1
+VVL[87>6BV@=eDO9=R;ni;0
+!s100 3e5@L3HS^KjA_Kc_aFQ<01
+R8
+32
+R30
+!i10b 1
+R31
+Z37 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/half_adder.vhd|
+Z38 !s107 C:/Users/david/VHDLProjects/alu/adder/half_adder.vhd|
+!i113 1
+R12
+R13
+Ahalf_adder_arc
+R2
+R3
+R4
+R5
+DEx4 work 10 half_adder 0 22 VL[87>6BV@=eDO9=R;ni;0
+!i122 9
+l16
+L15 7
+Va`LLVhoeKJBH[GRS?[VW=0
+!s100 ^2fhzE3KfD:efE]G_8P0M2
+R8
+32
+R30
+!i10b 1
+R31
+R37
+R38
+!i113 1
+R12
+R13
+Eincrementer_8_bit
+Z39 w1742503766
+R2
+R3
+R4
+R5
+!i122 10
+R0
+Z40 8C:/Users/david/VHDLProjects/alu/adder/incrementer_8_bit.vhd
+Z41 FC:/Users/david/VHDLProjects/alu/adder/incrementer_8_bit.vhd
+l0
+L5 1
+V>k]@[MTNo`EPBa>amHXj00
+!s100 MPclMKl3LQYc]naRJ6O`70
+R8
+32
+R30
+!i10b 1
+R31
+Z42 !s90 -reportprogress|300|-work|work|C:/Users/david/VHDLProjects/alu/adder/incrementer_8_bit.vhd|
+Z43 !s107 C:/Users/david/VHDLProjects/alu/adder/incrementer_8_bit.vhd|
+!i113 1
+R12
+R13
+Aincrementer_8_bit_arc
+R2
+R3
+R4
+R5
+DEx4 work 17 incrementer_8_bit 0 22 >k]@[MTNo`EPBa>amHXj00
+!i122 10
+l47
+L14 45
+V5Qf9IRb6dIXmI1J=haeeN0
+!s100 :b4zTN@Gn:^>k19[^8IHD0
+R8
+32
+R30
+!i10b 1
+R31
+R42
+R43
+!i113 1
+R12
+R13

@@ -1,0 +1,131 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/david/VerilogProjects/intrevue questions/q1
+vNAND
+Z1 !s110 1747728664
+!i10b 1
+!s100 =fJQW2SmW7];:7]`T^Kj50
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I`CD2SPeB@zoNL5SzYbd^]1
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1747683369
+8C:/Users/david/VerilogProjects/intrevue questions/q1/NAND.v
+FC:/Users/david/VerilogProjects/intrevue questions/q1/NAND.v
+!i122 32
+L0 1 9
+Z4 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z5 !s108 1747728664.000000
+!s107 C:/Users/david/VerilogProjects/intrevue questions/q1/NAND.v|
+!s90 -reportprogress|300|-work|work|C:/Users/david/VerilogProjects/intrevue questions/q1/NAND.v|
+!i113 1
+Z6 o-work work
+Z7 tCvgOpt 0
+n@n@a@n@d
+vtb_NAND
+R1
+!i10b 1
+!s100 @Yb_IGQg]2RjA63a?CTff0
+R2
+IT@1i:Q:1MkQ_Y^CJPEj<F2
+R3
+R0
+w1747728655
+8C:/Users/david/VerilogProjects/intrevue questions/q1/tb_NAND.v
+FC:/Users/david/VerilogProjects/intrevue questions/q1/tb_NAND.v
+!i122 33
+L0 3 33
+R4
+r1
+!s85 0
+31
+R5
+!s107 C:/Users/david/VerilogProjects/intrevue questions/q1/tb_NAND.v|
+!s90 -reportprogress|300|-work|work|C:/Users/david/VerilogProjects/intrevue questions/q1/tb_NAND.v|
+!i113 1
+R6
+R7
+ntb_@n@a@n@d
+vtb_XOR
+Z8 !s110 1747729268
+!i10b 1
+!s100 <PLAlN`KAfWfAbgEE^:O:0
+R2
+I6QkoFz9?gL[S<LONz6`c30
+R3
+R0
+w1747729210
+8C:/Users/david/VerilogProjects/intrevue questions/q1/tb_XOR.v
+FC:/Users/david/VerilogProjects/intrevue questions/q1/tb_XOR.v
+!i122 39
+L0 3 32
+R4
+r1
+!s85 0
+31
+Z9 !s108 1747729268.000000
+!s107 C:/Users/david/VerilogProjects/intrevue questions/q1/tb_XOR.v|
+!s90 -reportprogress|300|-work|work|C:/Users/david/VerilogProjects/intrevue questions/q1/tb_XOR.v|
+!i113 1
+R6
+R7
+ntb_@x@o@r
+vXOR
+!s110 1747729111
+!i10b 1
+!s100 P[fUSRIj;RO`JLZPf>`kM0
+R2
+I22R<SzB7@GGaS;zC_cH]J2
+R3
+R0
+w1747729031
+Z10 8C:/Users/david/VerilogProjects/intrevue questions/q1/XOR_2.v
+Z11 FC:/Users/david/VerilogProjects/intrevue questions/q1/XOR_2.v
+!i122 37
+Z12 L0 1 14
+R4
+r1
+!s85 0
+31
+!s108 1747729111.000000
+!s107 C:/Users/david/VerilogProjects/intrevue questions/q1/XOR_2.v|
+Z13 !s90 -reportprogress|300|-work|work|C:/Users/david/VerilogProjects/intrevue questions/q1/XOR_2.v|
+!i113 1
+R6
+R7
+n@x@o@r
+vXOR_2
+R8
+!i10b 1
+!s100 Xa96a36CP0c626f@=E`093
+R2
+Iz7^h8`XQlQXVgHINNh0>;2
+R3
+R0
+w1747729259
+R10
+R11
+!i122 40
+R12
+R4
+r1
+!s85 0
+31
+R9
+Z14 !s107 C:/Users/david/VerilogProjects/intrevue questions/q1/XOR_2.v|
+R13
+!i113 1
+R6
+R7
+n@x@o@r_2

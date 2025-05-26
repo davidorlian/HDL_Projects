@@ -1,2 +1,0 @@
-Implement a XOR gate with NAND gates only.
-See module.

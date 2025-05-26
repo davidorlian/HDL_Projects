@@ -1,7 +1,7 @@
 module register_8bit(
     input  wire CLK,
     input  wire RST,
-    input  wire lode, // All driven by external logic should be declared as wire
+    input  wire load, // All driven by external logic should be declared as wire
     input  wire [7:0] data_in,
     output wire [7:0] data_out 
 );

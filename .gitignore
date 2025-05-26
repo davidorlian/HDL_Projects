@@ -1,0 +1,2 @@
+# Ignore all 'work' folders used by ModelSim
+**/work/

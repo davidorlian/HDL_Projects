@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module TB_D_FF;
+module TB_D_FF ();
 
 	reg  TB_D; // In tb use reg for signals that are driven or changed to stimulus the design (often connected to input).
 	reg  TB_CLK;

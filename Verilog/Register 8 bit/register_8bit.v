@@ -19,7 +19,7 @@ module register_8bit(
     D_FF DFF7 ( .D(d_input[7]), .CLK(CLK), .CLR(RST), .Q(q_output[7]) );
 
     always @(*) begin
-        if (lode) begin
+        if (load) begin
             d_input <= data_in;
         end else begin
             d_input <= q_output;

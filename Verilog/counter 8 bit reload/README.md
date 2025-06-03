@@ -15,13 +15,13 @@ These capabilities are essential when the counter is expected to be responsive t
 ## Module: `cntr_8bit`
 
 ### Ports
-| Name    | Direction | Width   | Description                                                      |
-|---------|-----------|---------|------------------------------------------------------------------|
-| `clk`   | input     | 1 bit   | Clock signal                                                     |
-| `reset` | input     | 1 bit   | Synchronous reset                                                |
-| `load`  | input     | 8 bits  | Value used to calculate initial counter state (`q = 255 - load`) |
-| `count` | output    | 8 bits  | Current counter value                                            |
-| `tc`    | output    | 1 bit   | Terminal count flag, active when `count == 255`                  |
+| Name    | Direction | Width  | Description                                                      |
+|---------|-----------|--------|------------------------------------------------------------------|
+| `clk`   | input     | 1 bit  | Clock signal                                                     |
+| `reset` | input     | 1 bit  | Synchronous reset                                                |
+| `load`  | input     | 8 bits | Value used to calculate initial counter state (`q = 255 - load`) |
+| `count` | output    | 8 bits | Current counter value                                            |
+| `tc`    | output    | 1 bit  | Terminal count flag, active when `count == 255`                  |
 
 
 ## Testbench: `tb_cntr`

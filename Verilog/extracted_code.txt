@@ -1,0 +1,1557 @@
+CODE AND DOCUMENTATION EXTRACTION
+Source Folder: C:\Users\david\HDL_Projects\Verilog
+Total Files: 33
+Generated: C:\Users\david\HDL_Projects\Verilog
+================================================================================
+
+
+############################################################
+📁 ROOT DIRECTORY
+############################################################
+
+
+──────────────────────────────────────────────────
+🐍 PYTHON FILE: get_info.py
+📍 PATH: get_info.py
+📊 SIZE: 1637 bytes
+──────────────────────────────────────────────────
+
+import os
+
+
+def print_tree_with_readmes(root):
+    """
+    Recursively prints the directory tree and the content of README.md files
+    inline under each directory where they appear.
+    """
+    for dirpath, dirnames, filenames in os.walk(root):
+        # Tree formatting
+        level = dirpath.replace(root, "").count(os.sep)
+        indent = "    " * level
+        dirname = os.path.basename(dirpath) or "."
+        print(f"{indent}{dirname}/")
+
+        # Print files in this directory
+        for filename in sorted(filenames):
+            file_indent = "    " * (level + 1)
+            print(f"{file_indent}{filename}")
+            
+            if filename == "README.md":
+                print("here")
+                readme_path = os.path.join(dirpath, filename)
+                print("here")
+                print(readme_path)
+                try:
+                    with open(readme_path, encoding='utf-8') as f:
+                        content = f.read().strip()
+                        print(content)
+                        if content:
+                            content_lines = content.splitlines()
+                            for line in content_lines:
+                                print(f"{file_indent}    {line}")
+                        else:
+                            print(f"{file_indent}    (README.md is empty)")
+                except Exception as e:
+                    print(f"{file_indent}    (Error reading README.md: {e})")
+            
+
+if __name__ == "__main__":
+    print("Verilog Directory Tree with README.md Contents:\n")
+    print_tree_with_readmes(".")
+
+──────────────────────────────────────────────────
+END OF get_info.py
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+🐍 PYTHON FILE: get_text.py
+📍 PATH: get_text.py
+📊 SIZE: 5812 bytes
+──────────────────────────────────────────────────
+
+from pathlib import Path
+
+
+def extract_text_from_file(file_path):
+    """Extract text content from a code or markdown file."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+    except UnicodeDecodeError:
+        # Try with different encoding if UTF-8 fails
+        try:
+            with open(file_path, 'r', encoding='latin-1') as file:
+                return file.read()
+        except Exception as e:
+            return f"[Error reading file with latin-1 encoding: {str(e)}]"
+    except Exception as e:
+        return f"[Error reading file: {str(e)}]"
+
+
+def get_file_type_symbol(file_extension):
+    """Return a symbol to represent the file type."""
+    symbols = {
+        '.py': '🐍 PYTHON',
+        '.v': '⚡ VERILOG',
+        '.md': '📝 MARKDOWN'
+    }
+    return symbols.get(file_extension, f'📄 {file_extension.upper()}')
+
+
+def process_code_files(input_folder, output_file):
+    """Process all .v, .py, and .md files in the input folder and subfolders."""
+    input_path = Path(input_folder)
+
+    if not input_path.exists():
+        print(f"Error: Input folder '{input_folder}' does not exist.")
+        return False
+
+    if not input_path.is_dir():
+        print(f"Error: '{input_folder}' is not a directory.")
+        return False
+
+    # Find all target files recursively
+    target_extensions = ['.v', '.py', '.md']
+    all_files = []
+
+    for ext in target_extensions:
+        # Use rglob for recursive search (includes subfolders)
+        files = list(input_path.rglob(f'*{ext}'))
+        all_files.extend(files)
+
+    if not all_files:
+        print(f"No .v, .py, or .md files found in '{input_folder}' and its subfolders")
+        return False
+
+    # Sort files by their relative path for organized output
+    all_files.sort(key=lambda x: str(x.relative_to(input_path)))
+
+    print(f"Found {len(all_files)} file(s) to process...")
+
+    # Group files by directory for better organization
+    files_by_dir = {}
+    for file_path in all_files:
+        relative_path = file_path.relative_to(input_path)
+        dir_path = relative_path.parent
+
+        if dir_path not in files_by_dir:
+            files_by_dir[dir_path] = []
+        files_by_dir[dir_path].append(file_path)
+
+    # Process files and write to output
+    try:
+        with open(output_file, 'w', encoding='utf-8') as outfile:
+            outfile.write(f"CODE AND DOCUMENTATION EXTRACTION\n")
+            outfile.write(f"Source Folder: {input_path}\n")
+            outfile.write(f"Total Files: {len(all_files)}\n")
+            outfile.write(f"Generated: {Path.cwd()}\n")
+            outfile.write(f"{'=' * 80}\n\n")
+
+            # Process files organized by directory
+            for dir_path in sorted(files_by_dir.keys()):
+                # Write directory header
+                if str(dir_path) == '.':
+                    dir_name = "ROOT DIRECTORY"
+                else:
+                    dir_name = f"DIRECTORY: {dir_path}"
+
+                outfile.write(f"\n{'#' * 60}\n")
+                outfile.write(f"📁 {dir_name}\n")
+                outfile.write(f"{'#' * 60}\n\n")
+
+                # Process files in this directory
+                files_in_dir = sorted(files_by_dir[dir_path], key=lambda x: x.name)
+                for i, file_path in enumerate(files_in_dir, 1):
+                    relative_path = file_path.relative_to(input_path)
+                    print(f"Processing: {relative_path}")
+
+                    # Write file header
+                    file_symbol = get_file_type_symbol(file_path.suffix)
+                    outfile.write(f"\n{'─' * 50}\n")
+                    outfile.write(f"{file_symbol} FILE: {file_path.name}\n")
+                    outfile.write(f"📍 PATH: {relative_path}\n")
+                    outfile.write(f"📊 SIZE: {file_path.stat().st_size} bytes\n")
+                    outfile.write(f"{'─' * 50}\n\n")
+
+                    # Extract and write content
+                    content = extract_text_from_file(file_path)
+                    if content.strip():  # Only write if there's actual content
+                        outfile.write(content)
+                        if not content.endswith('\n'):
+                            outfile.write('\n')
+                    else:
+                        outfile.write("[Empty file or no readable content]\n")
+
+                    outfile.write(f"\n{'─' * 50}\n")
+                    outfile.write(f"END OF {file_path.name}\n")
+                    outfile.write(f"{'─' * 50}\n\n")
+
+        print(f"\nContent successfully extracted to: {output_file}")
+        print(f"Total files processed: {len(all_files)}")
+
+        # Print summary by file type
+        type_counts = {}
+        for file_path in all_files:
+            ext = file_path.suffix
+            type_counts[ext] = type_counts.get(ext, 0) + 1
+
+        print("\nFile type summary:")
+        for ext, count in sorted(type_counts.items()):
+            file_type = get_file_type_symbol(ext)
+            print(f"  {file_type}: {count} files")
+
+        return True
+
+    except Exception as e:
+        print(f"Error writing to output file: {str(e)}")
+        return False
+
+
+if __name__ == "__main__":
+    # Interactive mode
+    input_folder = input("Enter the path to the folder with code files (.v, .py, .md): ").strip()
+    output_file = input("Enter output file name (or press Enter for 'extracted_code.txt'): ").strip()
+    if not output_file:
+        output_file = "extracted_code.txt"
+
+    success = process_code_files(input_folder, output_file)
+
+    if success:
+        print("\nExtraction completed successfully!")
+    else:
+        print("\nExtraction failed!")
+
+──────────────────────────────────────────────────
+END OF get_text.py
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: CD74AC174
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: CD74AC174.v
+📍 PATH: CD74AC174\CD74AC174.v
+📊 SIZE: 605 bytes
+──────────────────────────────────────────────────
+
+module CD74AC174 (
+	input  CLK,
+	input  CLR,
+	input  D1, D2, D3, D4, D5, D6, 
+	output Q1, Q2, Q3, Q4, Q5, Q6
+);
+
+		D_FF DFF1 (
+			.CLK(CLK),
+			.CLR(~CLR),  //Acteav low
+			.D(D1),
+			.Q(Q1)
+		);
+
+		D_FF DFF2 (
+			.CLK(CLK),
+			.CLR(~CLR),
+			.D(D2),
+			.Q(Q2)
+		);
+
+		D_FF DFF3 (
+			.CLK(CLK),
+			.CLR(~CLR),
+			.D(D3),
+			.Q(Q3)
+		);
+
+		D_FF DFF4 (
+			.CLK(CLK),
+			.CLR(~CLR),
+			.D(D4),
+			.Q(Q4)
+		);
+
+		D_FF DFF5 (
+			.CLK(CLK),
+			.CLR(~CLR),
+			.D(D5),
+			.Q(Q5)
+		);
+
+		D_FF DFF6 (
+			.CLK(CLK),
+			.CLR(~CLR),
+			.D(D6),
+			.Q(Q6)
+		);
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF CD74AC174.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: CD74AC174_tb.v
+📍 PATH: CD74AC174\CD74AC174_tb.v
+📊 SIZE: 1114 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module CD74AC174_tb ();
+
+    // Declare test bench signals
+    reg  CLK_tb;
+    reg  CLR_tb;
+    reg  [5:0] D_bus_tb; // For tb it is easyer to use bus.
+    wire [5:0] Q_bus_tb; 
+
+    CD74AC174 UUT (  // Same as DUT
+        .CLK(CLK_tb),
+        .CLR(CLR_tb),
+        .D1(D_bus_tb[0]),
+        .D2(D_bus_tb[1]),
+        .D3(D_bus_tb[2]),
+        .D4(D_bus_tb[3]),
+        .D5(D_bus_tb[4]),
+        .D6(D_bus_tb[5]),
+        .Q1(Q_bus_tb[0]),
+        .Q2(Q_bus_tb[1]),
+        .Q3(Q_bus_tb[2]),
+        .Q4(Q_bus_tb[3]),
+        .Q5(Q_bus_tb[4]),
+        .Q6(Q_bus_tb[5])
+    );
+
+    initial begin // Only 1 initial loop!
+        CLK_tb = 0;
+		D_bus_tb = 0;
+		CLR_tb = 1;
+        forever #5 CLK_tb = ~CLK_tb; // The clock is often considered part of the initial.
+    end
+
+	always begin
+		#10
+		D_bus_tb = $random & 6'h3F; // Get the lower 6 random bits
+        $display("Time=%0t: D_bus=%b, Q_bus=%b", $time, D_bus_tb, Q_bus_tb);
+	end
+
+	always begin
+		#30
+		if ($random % 2 == 0) begin
+			CLR_tb = 0;     
+			#5 CLR_tb = 1;
+		end
+	end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF CD74AC174_tb.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+📝 MARKDOWN FILE: README.md
+📍 PATH: CD74AC174\README.md
+📊 SIZE: 547 bytes
+──────────────────────────────────────────────────
+
+# CD74AC174 Hex D-Flip-Flop
+
+This module implements a **6-bit D-Flip-Flop**, based on the architecture of a **CD74AC174** integrated circuit.
+
+This module came after moduling a D-Flip-Flop and was design to building a more complex, real-world component. It demonstrates:
+- **Hierarchical design** by instantiating six individual DFF modules.
+- The handling of common IC features like an active-low clear input.
+
+The included testbench provides stimulus, including random data and clear pulses, to thoroughly simulate the module's behavior.
+
+──────────────────────────────────────────────────
+END OF README.md
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: counter 8 bit
+############################################################
+
+
+──────────────────────────────────────────────────
+📝 MARKDOWN FILE: README.md
+📍 PATH: counter 8 bit\README.md
+📊 SIZE: 1548 bytes
+──────────────────────────────────────────────────
+
+# 8-Bit Counter Module and Testbench
+
+This module demonstrates a simple 8-bit synchronous counter, along with a testbench designed to verify its functionality.
+
+Typically, counters encapsulate their internal state, which can make simulation and debugging more difficult. In this testbench, hierarchical signal access is used to "peek" inside the Design Under Test (DUT) and observe the counter's internal state directly during simulation. This allows verification of the counter’s behavior without modifying its implementation.
+
+## Key Features
+- 8-bit synchronous counter (counts from 0 to 255)
+- Synchronous reset
+- Terminal count (`tc`) output asserted when the counter reaches its maximum value (255)
+- Testbench uses hierarchical signal access to monitor internal signal (`DUT.q`)
+- Uses `force` and `release` to control internal state for test purposes
+
+## Verification Approach
+The testbench uses several techniques to validate the counter's behavior:
+- **Hierarchical Signal Access**: Allows observation of internal signal `DUT.q` directly in the simulation, enabling tracking of the counter value without modifying the design.
+- **Forcing Values**: The `force` construct is used to set the internal counter value to a specific value (`8'hEF`) during simulation. This is especially useful in verifying edge conditions, such as behavior near the terminal count.
+- **Reset Testing**: The testbench applies multiple reset pulses at different times, verifying the synchronous reset behavior under various timing conditions.
+
+──────────────────────────────────────────────────
+END OF README.md
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: cntr_8bit.v
+📍 PATH: counter 8 bit\cntr_8bit.v
+📊 SIZE: 315 bytes
+──────────────────────────────────────────────────
+
+// This is a Verilog Time Base Generator
+
+module cntr_8bit
+(
+  input  wire clk,
+  input  wire reset,
+  output wire tc
+);
+
+reg [7:0] q;
+
+always @ (posedge clk)
+  if (reset)
+    q = 8'b0;
+  else
+	if (q < 8'hff)
+		q <= q + 1;
+	else
+		q <= 8'b0;
+
+assign tc = (q == 8'hff) ? 1'b1 : 1'b0;
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF cntr_8bit.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_cntr_8bit.v
+📍 PATH: counter 8 bit\tb_cntr_8bit.v
+📊 SIZE: 738 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_cntr ();
+
+reg tb_clk, tb_reset;
+wire tb_tc;
+
+
+
+initial begin        
+  $display ("Counter 8 bit");
+  $display ("time\t\tclk\treset\tcont\ttc");
+  $monitor ("%8g\t\t%b\t%b\t%d\t%b", 
+	  $time, tb_clk, tb_reset, DUT.q, tb_tc);	// Using internal signal
+  tb_clk = 1;
+  tb_reset = 1;
+  #70 tb_reset = 0;
+  force DUT.q = 8'hef; // Forcing a value in simulation
+  #10; // At least one clock cycle
+  release DUT.q;
+  #250 tb_reset = 1;
+  #30 tb_reset = 0;
+  #150 tb_reset = 1;
+  #10 tb_reset = 0; 
+  #50 $finish;      
+end
+
+always begin
+  #5 tb_clk = ~tb_clk; 
+end
+
+// Connect DUT to test bench
+cntr_8bit DUT 
+(
+  .clk(tb_clk),
+  .reset(tb_reset),
+  .tc(tb_tc)
+);
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_cntr_8bit.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: counter 8 bit reload
+############################################################
+
+
+──────────────────────────────────────────────────
+📝 MARKDOWN FILE: README.md
+📍 PATH: counter 8 bit reload\README.md
+📊 SIZE: 1840 bytes
+──────────────────────────────────────────────────
+
+# 8-Bit Programmable Reloadable Counter
+
+This module implements an 8-bit up-counter with programmable auto-reload behavior. It is designed to serve as part of a register-based counter system, where external systems need both access to the current count and control over its periodic behavior.
+
+Unlike a basic counter, this design enables:
+- **Internal access and modification** of the counter value
+- **Loading of a specific value** into the counter via the `load` input
+- **Auto-reload** from a stored value once the counter reaches its maximum (255)
+- **Access to the current count** through the `count` output
+
+These capabilities are essential when the counter is expected to be responsive to external configurations, and a basic counter would not suffice.
+
+---
+
+## Module: `cntr_8bit`
+
+### Ports
+| Name    | Direction | Width   | Description                                                      |
+|---------|-----------|---------|------------------------------------------------------------------|
+| `clk`   | input     | 1 bit   | Clock signal                                                     |
+| `reset` | input     | 1 bit   | Synchronous reset                                                |
+| `load`  | input     | 8 bits  | Value used to calculate initial counter state (`q = 255 - load`) |
+| `count` | output    | 8 bits  | Current counter value                                            |
+| `tc`    | output    | 1 bit   | Terminal count flag, active when `count == 255`                  |
+
+
+## Testbench: `tb_cntr`
+
+### Key Features
+- Drives `clk`, `reset`, and `load` signals to test the full behavior of the counter.
+- Observes `count` and `tc` outputs in real time using `$monitor`.
+- Demonstrates:
+  - Reset-based loading behavior
+  - Auto-reload upon reaching terminal count
+  - Load value modification between resets
+
+──────────────────────────────────────────────────
+END OF README.md
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: cntr_8bit.v
+📍 PATH: counter 8 bit reload\cntr_8bit.v
+📊 SIZE: 361 bytes
+──────────────────────────────────────────────────
+
+module cntr_8bit
+(
+  input  wire clk,
+  input  wire reset,
+  input  wire [7:0] load,
+  output wire [7:0] count,
+  output wire tc
+);
+
+reg [7:0] q;
+
+always @ (posedge clk)
+  if (reset)
+    q = 8'hff - load;
+  else
+	if (q < 8'hff)
+		q <= q + 1;
+	else
+		q <= 8'hff - load;
+
+assign count = q;
+assign tc = (q == 8'hff) ? 1'b1 : 1'b0;
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF cntr_8bit.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_cntr_8bit.v
+📍 PATH: counter 8 bit reload\tb_cntr_8bit.v
+📊 SIZE: 700 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_cntr ();
+
+reg tb_clk, tb_reset;
+reg [7:0] tb_load;
+wire [7:0] tb_count;
+wire tb_tc;
+
+
+
+initial begin        
+  $display ("Counter 8 bit");
+  $display ("time\t\tclk\treset\tcount\ttc");
+  $monitor ("%8g\t\t%b\t%b\t%d\t%b", 
+	  $time, tb_clk, tb_reset, tb_count, tb_tc);	
+  tb_clk = 1;
+  tb_load = 8'd20;
+  tb_reset = 1;
+  #70 tb_reset = 0;
+  #5 tb_load = 8'd30;
+  #500 tb_reset = 1;
+  #10 tb_reset = 0;
+  #300 tb_reset = 1;
+  #10 tb_reset = 0; 
+  #2000 $finish;      
+end
+
+always begin
+  #5 tb_clk = ~tb_clk; 
+end
+
+// Connect DUT to test bench
+cntr_8bit DUT 
+(
+  tb_clk,
+  tb_reset,
+  tb_load,
+  tb_count,
+  tb_tc
+);
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_cntr_8bit.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: counter register 8 bit
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: cntr_reg_8bit.v
+📍 PATH: counter register 8 bit\cntr_reg_8bit.v
+📊 SIZE: 594 bytes
+──────────────────────────────────────────────────
+
+module cntr_reg_8bit (
+  input  clk,
+  input  rst,
+  input  load,
+  input  re_load,
+  input  [7:0] data_in,
+  output [7:0] data_out,
+  output tc
+);
+
+reg q_lode_en;
+wire q_tc;
+wire [7:0] q_load_val;
+
+  register_8bit reg_DUT (
+    .CLK(clk),
+    .RST(rst),
+    .load(load),
+    .data_in(data_in),
+    .data_out(q_load_val) 
+  );
+  
+  cntr_8bit cntr_DUT (
+    .clk(clk),
+    .reset(q_lode_en),
+    .load(q_load_val),
+    .count(data_out),
+    .tc(q_tc)
+  );
+
+  always @(posedge clk) begin
+    q_lode_en <= re_load | q_tc;
+  end
+
+  assign tc = q_tc;  
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF cntr_reg_8bit.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_cntr_reg_8bit.v
+📍 PATH: counter register 8 bit\tb_cntr_reg_8bit.v
+📊 SIZE: 1064 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_cntr_reg_8bit ();
+
+  reg tb_clk;
+  reg tb_rst;
+  reg tb_load;
+  reg tb_re_load;
+  reg [7:0] tb_data_in;
+  wire [7:0] tb_data_out;
+  wire tb_tc;
+
+  cntr_reg_8bit DUT (
+    .clk(tb_clk),
+    .rst(tb_rst),
+    .load(tb_load),
+    .re_load(tb_re_load),
+    .data_in(tb_data_in),
+    .data_out(tb_data_out),
+    .tc(tb_tc)
+  );
+
+  initial begin
+    tb_clk = 1;
+    tb_rst = 1;
+    tb_load = 0;
+    tb_re_load =0;
+    tb_data_in = 8'b0;
+
+    $display("Time\t\tclock\treset\tload\treload\tdata_in\tdata_out");
+    $monitor("%0t\t\t%b\t%b\t%b\t%b\t%d\t%d",$time, tb_clk, tb_rst, tb_load, tb_re_load, tb_data_in, tb_data_out);
+    #14 tb_rst = 0;
+    tb_data_in = 8'hf;
+    #10 tb_load = 1;
+    #10 tb_load = 0;
+    #50 tb_re_load = 1;
+    #10 tb_re_load = 0;
+    #10 tb_data_in = 8'hff;
+    #10 tb_load = 1;
+    #10 tb_load = 0;
+    #20 tb_rst = 1;
+    #10 tb_rst = 0;
+    #40 tb_re_load = 1;
+    #10 tb_re_load = 0;
+    #400
+    $finish;
+  end
+
+  always #5 tb_clk = ~tb_clk;
+
+
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_cntr_reg_8bit.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: D Flip Flop
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: D_FF.v
+📍 PATH: D Flip Flop\D_FF.v
+📊 SIZE: 297 bytes
+──────────────────────────────────────────────────
+
+module D_FF (
+	input  wire D,
+	input  wire CLK,
+	input  wire CLR,
+	output reg  Q    // The value is assigned inside an always block and declared as reg.
+);
+
+always @(posedge CLK or posedge CLR) begin // Positive-edge-triggered.
+	if (CLR)
+		Q <= 1'b0;
+	else
+		Q <= D;
+end
+		
+endmodule
+
+──────────────────────────────────────────────────
+END OF D_FF.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+📝 MARKDOWN FILE: README.md
+📍 PATH: D Flip Flop\README.md
+📊 SIZE: 348 bytes
+──────────────────────────────────────────────────
+
+# D-Flip-Flop
+
+This module focuses on the **D-Flip-Flop (DFF)**, recognizing its crucial role as the basic memory element in all digital **registers**.
+
+It represents for me the **beginning of the path** to understanding and potentially modeling the intricate architecture of **Timer2** module of the **Analog Devices ADuC841** microcontroller.
+
+──────────────────────────────────────────────────
+END OF README.md
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: TB_D_FF.v
+📍 PATH: D Flip Flop\TB_D_FF.v
+📊 SIZE: 898 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module TB_D_FF ();
+
+	reg  TB_D; // In tb use reg for signals that are driven or changed to stimulus the design (often connected to input).
+	reg  TB_CLK;
+	reg  TB_CLR;
+	wire TB_Q;  // In tb use wire for signals that are observed from your design (often connected to output).
+
+	D_FF DUT (
+		.D  (TB_D  ),
+		.CLK(TB_CLK),
+		.CLR(TB_CLR),
+		.Q  (TB_Q  )
+	);
+	
+	initial begin
+		TB_CLK = 0;
+		TB_CLR = 1;
+		TB_D = 0;		
+		#5 TB_CLR = 0;
+	end
+	
+	always begin
+		#5 TB_CLK = ~TB_CLK;
+	end
+	
+	always begin
+		#10 TB_D = $random % 2; // $random is 32-bit signed int, %2 to restrict to just 0 or 1
+	end
+	
+	always begin
+		#30
+		if ($random % 2 == 0) begin
+			TB_CLR = 1;     
+			#5 TB_CLR = 0;
+	end
+end
+
+	
+	initial begin
+		$monitor("Time = %0t | TB_CLK = %b | TB_CLR = %b | D = %b | Q = %b", $time, TB_CLK, TB_CLR, TB_D, TB_Q);
+    end
+	
+endmodule
+
+──────────────────────────────────────────────────
+END OF TB_D_FF.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: intrevue questions\q1
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: NAND.v
+📍 PATH: intrevue questions\q1\NAND.v
+📊 SIZE: 89 bytes
+──────────────────────────────────────────────────
+
+module NAND (
+	input  a,
+	input  b,
+	output y
+);
+
+	assign y = ~(a&b);
+	
+endmodule
+
+──────────────────────────────────────────────────
+END OF NAND.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+📝 MARKDOWN FILE: README.md
+📍 PATH: intrevue questions\q1\README.md
+📊 SIZE: 1187 bytes
+──────────────────────────────────────────────────
+
+# XOR Gate Using NAND Gates
+
+This project demonstrates the implementation of an XOR (Exclusive OR) gate using only NAND gates, showcasing two different design approaches in Verilog HDL.
+
+## Overview
+This implementation proves that XOR functionality can be achieved using only NAND gates, which is significant because NAND gates are functionally complete and can implement any Boolean function.
+
+## Implementation Approaches
+### 1. Structural Implementation (XOR.v)
+- Uses instantiated NAND gate modules
+- Requires 5 NAND gates total
+- Demonstrates hierarchical design methodology
+- Shows explicit gate-level connections through wire declarations
+
+### 2. Behavioral Implementation (XOR_2.v)
+- Uses continuous assignments with NAND logic expressions
+- Implements the same 5-NAND gate logic structure
+- More compact and readable code
+- Functionally equivalent to the structural approach
+
+## Testing
+Each implementation includes comprehensive testbenches that:
+- Test all possible input combinations (00, 01, 10, 11)
+- Display results in a formatted truth table
+- Verify correct XOR behavior for both implementations
+- Use proper timing delays for signal propagation
+
+──────────────────────────────────────────────────
+END OF README.md
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: XOR.v
+📍 PATH: intrevue questions\q1\XOR.v
+📊 SIZE: 373 bytes
+──────────────────────────────────────────────────
+
+module XOR (
+	input  a, b,
+	output y
+);
+
+	wire q1_1, q1_2, q2_1, q2_2;
+
+	NAND NAND1 (
+		.a(a),
+		.b(a),
+		.y(q1_1)
+	);
+	
+	NAND NAND2 (
+		.a(b),
+		.b(b),
+		.y(q1_2)
+	);
+
+	NAND NAND3 (
+		.a(q1_1),
+		.b(b),
+		.y(q2_1)
+	);
+
+	NAND NAND4 (
+		.a(a),
+		.b(q1_2),
+		.y(q2_2)
+	);
+	
+	NAND NAND5 (
+		.a(q2_1),
+		.b(q2_2),
+		.y(y)
+	);
+
+endmodule	
+	
+
+──────────────────────────────────────────────────
+END OF XOR.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: XOR_2.v
+📍 PATH: intrevue questions\q1\XOR_2.v
+📊 SIZE: 257 bytes
+──────────────────────────────────────────────────
+
+module XOR_2 (
+	input  a, b,
+	output y
+);
+
+	wire q1_1, q1_2, q2_1, q2_2;
+	
+	assign q1_1 = ~(  a  &  a  );
+	assign q1_2 = ~(  b  &  b  );
+	assign q2_1 = ~(q1_1 &  b  );
+	assign q2_2 = ~(  a  & q1_2);
+	assign   y  = ~(q2_1 & q2_2);
+
+endmodule	
+	
+
+──────────────────────────────────────────────────
+END OF XOR_2.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_NAND.v
+📍 PATH: intrevue questions\q1\tb_NAND.v
+📊 SIZE: 575 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_NAND ();
+  
+  reg  tb_a;
+  reg  tb_b;
+  wire tb_y;
+  
+  integer i, j;
+  
+  NAND DUT (
+  	.a(tb_a),
+  	.b(tb_b),
+  	.y(tb_y)
+  );
+  
+  initial
+    begin
+      $display(" a b | y ");
+      $display("---------");
+    
+      for (i = 0; i < 2; i = i + 1)
+ 	    begin
+          for (j = 0; j < 2; j = j + 1)
+ 	        begin
+              tb_a = j;
+              tb_b = i;
+              #1;
+              $display(" %b %b | %b", tb_a, tb_b, tb_y);
+              #9;
+            end
+        end
+    end
+	
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_NAND.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_XOR.v
+📍 PATH: intrevue questions\q1\tb_XOR.v
+📊 SIZE: 564 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_XOR ();
+
+  reg tb_a, tb_b;
+  wire tb_y;
+  
+  integer i, j;
+  
+  XOR DUT (
+    .a(tb_a),
+    .b(tb_b),
+    .y(tb_y)
+  );
+  
+  initial
+    begin
+      $display(" a b | y ");
+      $display("---------");
+    
+      for (i = 0; i < 2; i = i + 1)
+ 	    begin
+          for (j = 0; j < 2; j = j + 1)
+ 	        begin
+              tb_a = j;
+              tb_b = i;
+              #1;
+              $display(" %b %b | %b", tb_a, tb_b, tb_y);
+              #9;
+            end
+        end
+    end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_XOR.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_XOR_2.v
+📍 PATH: intrevue questions\q1\tb_XOR_2.v
+📊 SIZE: 568 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_XOR_2 ();
+
+  reg tb_a, tb_b;
+  wire tb_y;
+  
+  integer i, j;
+  
+  XOR_2 DUT (
+    .a(tb_a),
+    .b(tb_b),
+    .y(tb_y)
+  );
+  
+  initial
+    begin
+      $display(" a b | y ");
+      $display("---------");
+    
+      for (i = 0; i < 2; i = i + 1)
+ 	    begin
+          for (j = 0; j < 2; j = j + 1)
+ 	        begin
+              tb_a = j;
+              tb_b = i;
+              #1;
+              $display(" %b %b | %b", tb_a, tb_b, tb_y);
+              #9;
+            end
+        end
+    end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_XOR_2.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: intrevue questions\q2
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: decoder_2to4.v
+📍 PATH: intrevue questions\q2\decoder_2to4.v
+📊 SIZE: 492 bytes
+──────────────────────────────────────────────────
+
+module decoder_2to4 (
+    input  wire enable,
+    input  wire [1:0] in,
+    output reg  [3:0] out
+);
+
+
+    always @(*) begin
+        out = 4'b0000; // If enable is low
+
+        if (enable == 1'b1) begin
+            case (in)
+                2'b00: out[0] = 1'b1; 
+                2'b01: out[1] = 1'b1; 
+                2'b10: out[2] = 1'b1; 
+                2'b11: out[3] = 1'b1; 
+                default: out = 4'b0000;
+            endcase
+        end
+    end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF decoder_2to4.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: decoder_4to16.v
+📍 PATH: intrevue questions\q2\decoder_4to16.v
+📊 SIZE: 652 bytes
+──────────────────────────────────────────────────
+
+module decoder_4to16 (
+    input enable,
+    input [3:0] in,
+    output [15:0] out
+);
+
+    wire [3:0] q;
+
+    decoder_2to4 DEC1 (
+        .enable(enable),
+        .in(in[3:2]),
+        .out(q)
+    );
+
+    decoder_2to4 DEC2 (
+        .enable(q[0]),
+        .in(in[1:0]),
+        .out(out[3:0])
+    ); 
+
+    decoder_2to4 DEC3 (
+        .enable(q[1]),
+        .in(in[1:0]),
+        .out(out[7:4])
+    );
+
+    decoder_2to4 DEC4 (
+        .enable(q[2]),
+        .in(in[1:0]),
+        .out(out[11:8])
+    );
+
+    decoder_2to4 DEC5 (
+        .enable(q[3]),
+        .in(in[1:0]),
+        .out(out[15:12])
+    );
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF decoder_4to16.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_decoder_2to4.v
+📍 PATH: intrevue questions\q2\tb_decoder_2to4.v
+📊 SIZE: 698 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_decoder_2to4 ();
+
+    reg  tb_enable;
+    reg  [1:0] tb_in;
+    wire [3:0] tb_out;
+
+    decoder_2to4 DUT (
+        .enable(tb_enable),
+        .in(tb_in),
+        .out(tb_out)
+    );
+
+    integer i; // Declare loop variables
+    integer j;
+
+    initial begin
+
+        $display("Time\tEnable\tInput\tOutput");
+
+        for (i = 0; i < 2; i = i + 1) begin
+            for (j = 0; j < 4; j = j + 1) begin
+                tb_enable = i;
+                tb_in = j;
+                #10
+                $display("%0t\t%b\t%b\t%b", $time, tb_enable, tb_in, tb_out);
+            end
+        end
+        #10
+        $finish;
+    end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_decoder_2to4.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_decoder_4to16.v
+📍 PATH: intrevue questions\q2\tb_decoder_4to16.v
+📊 SIZE: 713 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module tb_decoder_4to16 ();
+
+    reg tb_enable;
+    reg [3:0] tb_in;
+    wire [15:0] tb_out;
+
+    decoder_4to16 DUT (
+        .enable(tb_enable),
+        .in(tb_in),
+        .out(tb_out)
+    );
+
+    integer i, j;
+
+        initial begin
+            $display("time\tenable\tinput\toutput");
+
+            for (i = 0; i <= 15; i = i + 1) begin
+                for (j = 0; j <= 2; j = j + 1) begin
+                    tb_enable = j;
+                    tb_in = i;
+                    #10
+                    $display("%0t\t%b\t%b\t%b", $time, tb_enable, tb_in, tb_out);
+                end
+            end
+            #10
+            $finish;
+        end
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF tb_decoder_4to16.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: monostable_RC
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: monostable_RC.v
+📍 PATH: monostable_RC\monostable_RC.v
+📊 SIZE: 770 bytes
+──────────────────────────────────────────────────
+
+module monostable_RC
+#( parameter RESISTOR = 1000;
+   parameter CAPACITOR = 100e-9;
+)
+(
+   input wire trigger,
+   output wire pulse
+);
+
+   localparam RC_TAU_SECONDS = RESISTOR * CAPACITOR;
+   // Using integer'() for robustness with #delay, assuming `timescale 1ns/...`
+   localparam TIMED_OFF_DURATION_NS = integer'(3 * RC_TAU_SECONDS * 1e9);
+   
+   reg current_pulse;
+
+   initial begin
+      current_pulse <= 1'b0;
+   end
+
+   always @(posedge trigger or negedge trigger) begin
+      if (trigger == 1) begin
+         current_pulse = 1'b1;
+      end elsif (trigger == 0) begin
+         current_pulse = 1'b1; 
+         #(TIMED_OFF_DURATION_NS) 
+         current_pulse = 1'b0;
+      end
+   end
+
+   assign pulse = current_pulse;
+    
+endmodule
+
+──────────────────────────────────────────────────
+END OF monostable_RC.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: tb_monostable_RC.v
+📍 PATH: monostable_RC\tb_monostable_RC.v
+📊 SIZE: 0 bytes
+──────────────────────────────────────────────────
+
+[Empty file or no readable content]
+
+──────────────────────────────────────────────────
+END OF tb_monostable_RC.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: Register 8 bit
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: register_8bit.v
+📍 PATH: Register 8 bit\register_8bit.v
+📊 SIZE: 1073 bytes
+──────────────────────────────────────────────────
+
+module register_8bit(
+    input  wire CLK,
+    input  wire RST,
+    input  wire load, // All driven by external logic should be declared as wire
+    input  wire [7:0] data_in,
+    output wire [7:0] data_out 
+);
+
+    reg [7:0] d_input;
+    wire [7:0] q_output;
+
+    D_FF DFF0 ( .D(d_input[0]), .CLK(CLK), .CLR(RST), .Q(q_output[0]) );
+    D_FF DFF1 ( .D(d_input[1]), .CLK(CLK), .CLR(RST), .Q(q_output[1]) );
+    D_FF DFF2 ( .D(d_input[2]), .CLK(CLK), .CLR(RST), .Q(q_output[2]) );
+    D_FF DFF3 ( .D(d_input[3]), .CLK(CLK), .CLR(RST), .Q(q_output[3]) );
+    D_FF DFF4 ( .D(d_input[4]), .CLK(CLK), .CLR(RST), .Q(q_output[4]) );
+    D_FF DFF5 ( .D(d_input[5]), .CLK(CLK), .CLR(RST), .Q(q_output[5]) );
+    D_FF DFF6 ( .D(d_input[6]), .CLK(CLK), .CLR(RST), .Q(q_output[6]) );
+    D_FF DFF7 ( .D(d_input[7]), .CLK(CLK), .CLR(RST), .Q(q_output[7]) );
+
+    always @(*) begin
+        if (load) begin
+            d_input <= data_in;
+        end else begin
+            d_input <= q_output;
+        end
+    end
+
+    assign data_out = q_output;
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF register_8bit.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: register_8bit_tb.v
+📍 PATH: Register 8 bit\register_8bit_tb.v
+📊 SIZE: 998 bytes
+──────────────────────────────────────────────────
+
+`timescale 1ns / 1ps
+
+module register_8bit_tb();
+
+    reg  CLK_tb;
+    reg  RST_tb;
+    reg  lode_tb;
+    reg  [7:0] data_in_tb;
+    wire [7:0] data_out_tb;
+ 
+    register_8bit UUT(
+        .CLK(CLK_tb),
+        .RST(RST_tb),
+        .lode(lode_tb),
+        .data_in(data_in_tb),
+        .data_out(data_out_tb)
+    );
+
+    initial begin
+        CLK_tb = 0;
+        forever #5 CLK_tb = ~CLK_tb;
+    end
+
+    initial begin
+        RST_tb =0;
+        lode_tb = 0;
+        data_in_tb = 0;
+        #17 RST_tb = 1;
+        #5 RST_tb = 0;
+        #10 lode_tb = 1;
+        #10 data_in_tb = 8'hff;
+        #10 lode_tb = 0;
+        #10 data_in_tb = 8'h00;
+        #10 lode_tb = 1;
+        #10 data_in_tb = 8'h55;
+        #10 lode_tb = 0;
+        #10 data_in_tb = 8'haa;
+        #10 lode_tb = 1;
+        #10 data_in_tb = 8'h00;
+        #10 lode_tb = 0;
+        #10 data_in_tb = 8'hff;
+        #10 lode_tb = 1;
+        #10 data_in_tb = 8'haa;
+    end
+    
+endmodule
+
+──────────────────────────────────────────────────
+END OF register_8bit_tb.v
+──────────────────────────────────────────────────
+
+
+############################################################
+📁 DIRECTORY: UART
+############################################################
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: baud_gen.v
+📍 PATH: UART\baud_gen.v
+📊 SIZE: 72 bytes
+──────────────────────────────────────────────────
+
+module baud_gen (
+    input clk,
+    input [16:0] baud_gen
+);
+
+    
+
+──────────────────────────────────────────────────
+END OF baud_gen.v
+──────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────
+⚡ VERILOG FILE: uart_t.v
+📍 PATH: UART\uart_t.v
+📊 SIZE: 437 bytes
+──────────────────────────────────────────────────
+
+module uart_t (
+    input clk,
+    input start,
+    input [6:0] data,
+    output reg tx,
+);
+    
+    reg busy;
+    reg parity;
+    integer i;
+
+    always @(start) begin
+            parity <= 0;
+            tx <= 1;
+            i <= 0;
+    always @(posedge clk) begin
+        tx <= data[i];
+        parity <= parity ^ tx;
+        i = i + 1;
+    end
+            tx = parity;
+            tx = 0;
+    end
+
+
+endmodule
+
+──────────────────────────────────────────────────
+END OF uart_t.v
+──────────────────────────────────────────────────
+

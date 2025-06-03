@@ -3,3 +3,6 @@
 
 # Ignore ModelSim waveform log file
 **/vsim.wlf
+
+Verilog/get_info.py
+Verilog/get_text.py

@@ -1,3 +1,5 @@
-# Ignore all 'work' folders used by ModelSim
+# Ignore ModelSim work directories
 **/work/
-**vsim.wlf
+
+# Ignore ModelSim waveform log file
+**/vsim.wlf

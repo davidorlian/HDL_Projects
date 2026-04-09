@@ -5,4 +5,5 @@
 **/vsim.wlf
 
 Verilog/get_info.py
-Verilog/get_text.py
+Verilog/get_text.py.idea/
+**/.idea/

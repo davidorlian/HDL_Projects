@@ -1,0 +1,72 @@
+//  Precision RTL Synthesis 64-bit 2021.1.0.4 (Production Release) Tue Jul 20 01:22:31 PDT 2021
+//  
+//  Copyright (c) Mentor Graphics Corporation, 1996-2021, All Rights Reserved.
+//             Portions copyright 1991-2008 Compuware Corporation
+//                       UNPUBLISHED, LICENSED SOFTWARE.
+//            CONFIDENTIAL AND PROPRIETARY INFORMATION WHICH IS THE
+//          PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS LICENSORS
+//  
+//  Running on Windows 10 dorlian@ELEC-403-122  10.0.19041 x64
+//  
+//  Start time Thu Jul 17 16:52:27 2025
+
+***************************************************************
+Device Utilization for 7A35TCPG236
+***************************************************************
+Resource                          Used    Avail   Utilization
+---------------------------------------------------------------
+IOs                               5       106       4.72%
+Global Buffers                    1       32        3.13%
+LUTs                              1       20800     0.00%
+CLB Slices                        1       8150      0.01%
+Dffs or Latches                   1       41600     0.00%
+Block RAMs                        0       50        0.00%
+DSP48E1s                          0       90        0.00%
+---------------------------------------------------------------
+
+***************************************************
+
+Library: work    Cell: tw_switch    View: INTERFACE
+
+***************************************************
+
+  Cell              Library  References     Total Area
+
+ BUFGP              xca7     1 x
+ FDRE               xca7     1 x      1      1 Dffs or Latches
+ IBUF               xca7     3 x
+ LUT3               xca7     1 x      1      1 LUTs
+ OBUF               xca7     1 x
+ VCC                xca7     1 x
+
+ Number of ports :                            5
+ Number of nets :                            12
+ Number of instances :                        8
+ Number of references to this view :          0
+
+Total accumulated area : 
+ Number of Dffs or Latches :                  1
+ Number of LUTs :                             1
+ Number of Primitive LUTs :                   1
+ Number of accumulated instances :            8
+
+
+*****************************
+ IO Register Mapping Report
+*****************************
+Design: work.tw_switch.INTERFACE
+
++----------------+-----------+----------+----------+----------+
+| Port           | Direction |   INFF   |  OUTFF   |  TRIFF   |
++----------------+-----------+----------+----------+----------+
+| clk            | Input     |          |          |          |
++----------------+-----------+----------+----------+----------+
+| reset          | Input     |          |          |          |
++----------------+-----------+----------+----------+----------+
+| door_switch    | Input     |          |          |          |
++----------------+-----------+----------+----------+----------+
+| bed_switch     | Input     |          |          |          |
++----------------+-----------+----------+----------+----------+
+| light          | Output    |          |          |          |
++----------------+-----------+----------+----------+----------+
+Total registers mapped: 0
